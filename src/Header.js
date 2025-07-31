@@ -15,11 +15,16 @@ function Header() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
+    const storedName = localStorage.getItem("userName");
+    if (token && storedName) {
+      setIsLoggedIn(true);
+      setUserName(storedName);
+    }
   }, []);
 
   const handleLoginSubmit = async (e) => {
@@ -43,6 +48,7 @@ function Header() {
         setEmail("");
         setPassword("");
         setIsLoggedIn(true);
+        setUserName(result.userName);
         navigate("/dashboard");
       } else {
         alert("Login failed. Please check your credentials.");
@@ -58,6 +64,7 @@ function Header() {
     localStorage.removeItem("role");
     localStorage.removeItem("userName");
     setIsLoggedIn(false);
+    setUserName("");
     alert("Logged out successfully.");
   };
 
@@ -98,7 +105,7 @@ function Header() {
                 </Link>
               </li>
             </ul>
-            <div className="d-flex">
+            <div className="d-flex align-items-center gap-2">
               {!isLoggedIn ? (
                 <>
                   <button
@@ -115,9 +122,14 @@ function Header() {
                   </button>
                 </>
               ) : (
-                <button className="btn btn-danger" onClick={handleLogout}>
-                  Logout
-                </button>
+                <>
+                  <span className="text-white fw-semibold">
+                    ⭐ <span style={{ color: "gold" }}>{userName}</span>
+                  </span>
+                  <button className="btn btn-danger btn-sm" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </>
               )}
             </div>
           </div>
