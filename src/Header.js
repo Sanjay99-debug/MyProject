@@ -16,6 +16,7 @@ function Header() {
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,6 +26,7 @@ function Header() {
       setIsLoggedIn(true);
       setUserName(storedName);
     }
+    setLoading(false);
   }, []);
 
   const handleLoginSubmit = async (e) => {
@@ -105,33 +107,40 @@ function Header() {
                 </Link>
               </li>
             </ul>
-            <div className="d-flex align-items-center gap-2">
-              {!isLoggedIn ? (
-                <>
-                  <button
-                    className="btn btn-outline-light me-2"
-                    onClick={() => setShowSignup(true)}
-                  >
-                    <FaUser className="me-1" /> Sign Up
-                  </button>
-                  <button
-                    className="btn btn-success"
-                    onClick={() => setShowLogin(true)}
-                  >
-                    <FaSignInAlt className="me-1" /> Login
-                  </button>
-                </>
-              ) : (
-                <>
-                  <span className="text-white fw-semibold">
-                    ⭐ <span style={{ color: "gold" }}>{userName}</span>
-                  </span>
-                  <button className="btn btn-danger btn-sm" onClick={handleLogout}>
-                    Logout
-                  </button>
-                </>
-              )}
-            </div>
+
+            {/* Login/Logout Section */}
+            {!loading && (
+              <div className="d-flex align-items-center gap-2">
+                {!isLoggedIn ? (
+                  <>
+                    <button
+                      className="btn btn-outline-light me-2"
+                      onClick={() => setShowSignup(true)}
+                    >
+                      <FaUser className="me-1" /> Sign Up
+                    </button>
+                    <button
+                      className="btn btn-success"
+                      onClick={() => setShowLogin(true)}
+                    >
+                      <FaSignInAlt className="me-1" /> Login
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-white fw-semibold">
+                      ⭐ <span style={{ color: "gold" }}>{userName}</span>
+                    </span>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </nav>
